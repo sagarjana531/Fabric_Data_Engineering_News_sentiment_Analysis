@@ -1,0 +1,30 @@
+{
+  "search_parameters": {
+    "engine": "google_news",
+    "q": "sample topic"
+  },
+  "organic_results": [
+    {
+      "position": 1,
+      "title": "Example article title one",
+      "link": "https://example.com/news/article-one",
+      "source": "Example News",
+      "date": "1 hour ago",
+      "iso_date": "2026-01-15T10:30:00Z",
+      "snippet": "Synthetic sample text used to demonstrate the expected article schema.",
+      "favicon": "https://example.com/favicon.ico",
+      "thumbnail": "https://example.com/images/article-one.jpg"
+    },
+    {
+      "position": 2,
+      "title": "Example article title two",
+      "link": "https://example.org/news/article-two",
+      "source": "Example Journal",
+      "date": "2 hours ago",
+      "iso_date": "2026-01-15T09:30:00Z",
+      "snippet": "A second synthetic record makes the sample useful for validating ingestion and deduplication.",
+      "favicon": "https://example.org/favicon.ico",
+      "thumbnail": "https://example.org/images/article-two.jpg"
+    }
+  ]
+}

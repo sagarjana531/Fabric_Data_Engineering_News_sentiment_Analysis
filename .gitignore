@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+.ipynb_checkpoints/
+data/Latest_News.json
+Files/
+Tables/
+*.delta
+*.parquet
+spark-warehouse/
