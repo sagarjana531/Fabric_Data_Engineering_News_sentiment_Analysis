@@ -1,16 +1,18 @@
 # Fabric Data Engineering: News Sentiment Analysis
 
-An end-to-end Microsoft Fabric Lakehouse project that ingests Google News search results, cleans and deduplicates article metadata with PySpark, stores curated data as Delta tables, and enriches each article with sentiment analysis.
+An end-to-end Microsoft Fabric analytics project. A scheduled pipeline copies news data into a Lakehouse, PySpark notebooks curate and score the articles, and the resulting data feeds a semantic model and interactive report.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-	A[News search JSON] --> B[Fabric Lakehouse Files]
-	B --> C[PySpark parse and quality checks]
+	A[Scheduled news ingestion] --> B[Fabric Lakehouse Files]
+	B --> C[Data transformation notebook]
 	C --> D[(tbl_latest_news Delta table)]
-	D --> E[SynapseML AnalyzeText]
+	D --> E[Sentiment analysis notebook]
 	E --> F[(tbl_sentiment_analysis Delta table)]
+	F --> G[Semantic model refresh]
+	G --> H[Interactive dashboard report]
 ```
 
 ## Project Contents
@@ -20,14 +22,17 @@ flowchart LR
 | `notebooks/01_ingest_latest_news.py` | Fabric notebook code for parsing, cleaning, deduplicating, and upserting news articles. |
 | `notebooks/02_analyze_sentiment.py` | Fabric notebook code for scoring article snippets and upserting sentiment results. |
 | `data/sample_latest_news.json` | Small synthetic fixture showing the expected input shape; it is not live news data. |
+| `docs/media/news-dashboard-demo.mp4` | Screen recording of the dashboard experience. |
 
 The `.py` files are notebook-cell source intended to run inside a Microsoft Fabric PySpark notebook. They are not standalone Spark applications and expect Fabric's built-in `spark` session and `display()` function.
 
 ## Data Flow
 
-1. Place the input JSON in the attached Lakehouse at `Files/Latest_News.json`. The expected shape is an object with an `organic_results` array; see the synthetic fixture in `data/`.
-2. Run `notebooks/01_ingest_latest_news.py`. It flattens article records, filters missing links/snippets, deduplicates on article link, normalizes `iso_date`, and performs an idempotent Delta upsert into `News_Project_LakeHouse.tbl_latest_news`.
-3. Run `notebooks/02_analyze_sentiment.py`. It analyzes each article snippet and upserts the result into `News_Project_LakeHouse.tbl_sentiment_analysis`.
+1. A scheduled Fabric pipeline copies the latest news JSON into the Lakehouse at `Files/Latest_News.json`.
+2. The transformation notebook flattens article records, filters missing links/snippets, deduplicates on article link, normalizes `iso_date`, and upserts into `News_Project_LakeHouse.tbl_latest_news`.
+3. The sentiment notebook analyzes each article snippet and upserts results into `News_Project_LakeHouse.tbl_sentiment_analysis`.
+4. The semantic model or dataset consumes the Lakehouse output and updates the report data.
+5. The report presents interactive visuals and filters for exploring article and sentiment insights.
 
 Both tables are Fabric-generated Delta outputs. Their internal files are intentionally not checked in; the notebooks create or update them in the Lakehouse.
 
@@ -46,9 +51,13 @@ No credentials, service keys, or workspace-specific dependency snapshots belong 
 
 The article link is the merge key for both Delta tables, making repeated notebook runs update existing articles instead of inserting duplicate rows.
 
+## Dashboard Demo
+
+[Watch the dashboard walkthrough](docs/media/news-dashboard-demo.mp4). The report uses interactive visuals and filters to explore the refreshed news and sentiment data.
+
 ## Resume Summary
 
-**Project:** Built a Microsoft Fabric Lakehouse pipeline using PySpark and Delta Lake to ingest and deduplicate news articles, then enrich article snippets with SynapseML sentiment analysis and persist reusable analytics tables.
+**Project:** Built a scheduled Microsoft Fabric Lakehouse analytics pipeline using PySpark, Delta Lake, and SynapseML to ingest and deduplicate news articles, enrich article snippets with sentiment, and surface refreshed data through a semantic model and interactive report.
 
 Add measured outcomes only after running the pipeline, for example: article volume processed, duplicate rate, sentiment distribution, and end-to-end runtime. No performance or scale metrics are claimed here.
 
