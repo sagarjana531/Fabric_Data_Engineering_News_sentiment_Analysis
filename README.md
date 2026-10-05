@@ -22,7 +22,7 @@ flowchart LR
 | `notebooks/01_ingest_latest_news.py` | Fabric notebook code for parsing, cleaning, deduplicating, and upserting news articles. |
 | `notebooks/02_analyze_sentiment.py` | Fabric notebook code for scoring article snippets and upserting sentiment results. |
 | `data/sample_latest_news.json` | Small synthetic fixture showing the expected input shape; it is not live news data. |
-| `docs/media/news-ingestion-pipeline.png` | Screenshot of a successful three-activity pipeline run. |
+| `docs/media/Pipeline.png` | Screenshot of a successful three-activity pipeline run. |
 | `docs/media/news-dashboard-demo.mp4` | Screen recording of the dashboard experience. |
 
 The `.py` files are notebook-cell source intended to run inside a Microsoft Fabric PySpark notebook. They are not standalone Spark applications and expect Fabric's built-in `spark` session and `display()` function.
@@ -56,7 +56,7 @@ The article link is the merge key for both Delta tables, making repeated noteboo
 
 The pipeline run below completed successfully, including news copy, data transformation, and sentiment analysis.
 
-![Microsoft Fabric news ingestion pipeline run](docs/media/news-ingestion-pipeline.png)
+![Microsoft Fabric news ingestion pipeline run](docs/media/Pipeline.png)
 
 [Watch the dashboard walkthrough](docs/media/news-dashboard-demo.mp4). The report uses interactive visuals and filters to explore the refreshed news and sentiment data.
 
